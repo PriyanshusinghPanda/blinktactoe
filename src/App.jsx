@@ -6,13 +6,29 @@ import { checkWinner } from "./gametype/offline/gameUtils";
 import "./App.css";
 
 function App() {
-  const [mode, setMode] = useState(null); // "offline" | "online" | null
+  const [mode, setMode] = useState(null);
+  const [player1Category, setPlayer1Category] = useState(null);
+  const [player2Category, setPlayer2Category] = useState(null);
+  const [player1Emoji, setPlayer1Emoji] = useState(null);
+  const [player2Emoji, setPlayer2Emoji] = useState(null);
   const [board, setBoard] = useState(Array(9).fill(null));
   const [isXNext, setIsXNext] = useState(true);
   const [winner, setWinner] = useState(null);
 
   const [firstPersonMoves, setFirstPersonMoves] = useState([]);
   const [secondPersonMoves, setSecondPersonMoves] = useState([]);
+
+  const emojiCategories = {
+    Animals: ["🐶", "🐱", "🐵", "🐰"],
+    Food: ["🍕", "🍟", "🍔", "🍩"],
+    Sports: ["⚽", "🏀", "🏈", "🎾"],
+  };
+
+  const getRandomEmoji = (category) => {
+  const emojis = emojiCategories[category];
+  const randomIndex = Math.floor(Math.random() * emojis.length);
+  return emojis[randomIndex];
+};
 
   const resetGame = () => {
     setBoard(Array(9).fill(null));
@@ -26,7 +42,7 @@ function App() {
     if (board[index] || winner) return;
 
     const newBoard = [...board];
-    const currentPlayer = isXNext ? "X" : "O";
+    const currentPlayer = isXNext ? player1Emoji : player2Emoji;
 
     newBoard[index] = currentPlayer;
 
@@ -77,29 +93,67 @@ function App() {
   if (!mode) return renderModeSelection();
 
   if (mode === "offline") {
-    return (
-      <div className="app">
-        <h1>Tic Tac Toe</h1>
-        <StatusBar isXNext={isXNext} winner={winner} />
-        <Gameboard board={board} onClick={handleClick} />
-        <button onClick={resetGame} className="reset-button">
-          Restart Game
-        </button>
+    if (!player1Category || !player2Category) {
+      return (
+        <div className="category-selection">
+  <h2>Player 1: Choose your category</h2>
+  {Object.keys(emojiCategories).map((category) => (
+    <button
+      key={category}
+      onClick={() => {
+        setPlayer1Category(category);
+        setPlayer1Emoji(getRandomEmoji(category));
+      }}
+    >
+      {category}
+    </button>
+  ))}
+
+  {player1Category && (
+    <>
+      <h2>Player 2: Choose your category</h2>
+      {Object.keys(emojiCategories).map((category) => (
         <button
+          key={category}
+          disabled={category === player1Category}
           onClick={() => {
-            setMode(null);
-            setBoard(Array(9).fill(null));
-            setIsXNext(true);
-            setWinner(null);
-            setFirstPersonMoves([]);
-            setSecondPersonMoves([]);
+            setPlayer2Category(category);
+            setPlayer2Emoji(getRandomEmoji(category));
           }}
-          className="back-button"
         >
-          Back to Mode Selection
+          {category}
         </button>
-      </div>
-    );
+      ))}
+    </>
+  )}
+</div>
+
+      );
+    } else {
+      return (
+        <div className="app">
+          <h1>Tic Tac Toe</h1>
+          <StatusBar isXNext={isXNext} winner={winner} />
+          <Gameboard board={board} onClick={handleClick} />
+          <button onClick={resetGame} className="reset-button">
+            Restart Game
+          </button>
+          <button
+            onClick={() => {
+              setMode(null);
+              setBoard(Array(9).fill(null));
+              setIsXNext(true);
+              setWinner(null);
+              setFirstPersonMoves([]);
+              setSecondPersonMoves([]);
+            }}
+            className="back-button"
+          >
+            Back to Mode Selection
+          </button>
+        </div>
+      );
+    }
   }
 
   if (mode === "online") {

@@ -24,26 +24,77 @@
   font-size: 1.5rem;
 }
 
-.reset-button {
-  margin-top: 20px;
-  padding: 10px 20px;
-  font-size: 1rem;
+.reset-button,
+.back-button {
+  margin: 15px 10px;
+  padding: 12px 24px;
+  font-size: 1.1rem;
+  font-weight: 500;
+  background: linear-gradient(145deg, #00ADB5, #007A86);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s ease;
 }
+
+.reset-button:hover,
+.back-button:hover {
+  background: #00ADB5;
+}
+
 .mode-selection {
   text-align: center;
   margin-top: 100px;
 }
 
 .mode-selection button {
-  margin: 10px;
-  padding: 12px 24px;
+  margin: 12px;
+  padding: 14px 28px;
   font-size: 1.2rem;
+  background: #393E46;
+  color: #EEEEEE;
+  border: none;
+  border-radius: 8px;
   cursor: pointer;
+  transition: all 0.3s ease-in-out;
 }
 
-.back-button {
-  margin-top: 20px;
-  padding: 10px 20px;
-  font-size: 1rem;
-  background-color: #ddd;
+.mode-selection button:hover {
+  background: #00ADB5;
+  transform: translateY(-2px);
+}
+
+.category-selection {
+  text-align: center;
+  padding-top: 80px;
+}
+
+.category-selection h2 {
+  font-size: 1.8rem;
+  margin-bottom: 20px;
+  color: #F0F0F0;
+}
+
+.category-selection button {
+  margin: 10px;
+  padding: 14px 30px;
+  font-size: 1.1rem;
+  font-weight: 500;
+  background: #393E46;
+  color: #EEEEEE;
+  border: 2px solid transparent;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+}
+
+.category-selection button:hover {
+  background: #00ADB5;
+  transform: scale(1.05);
+}
+
+.category-selection button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
