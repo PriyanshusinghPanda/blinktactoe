@@ -1,8 +1,13 @@
 import React from 'react'
+import Squarebox from './Squarebox'
 
-const Gameboard = () => {
+const Gameboard = ({ board, onClick }) => {
   return (
-    <div>Gameboard</div>
+    <div className="board">
+      {board.map((value, index) => (
+        <Squarebox key={index} value={value} onClick={() => onClick(index)} />
+      ))}
+    </div>
   )
 }
 

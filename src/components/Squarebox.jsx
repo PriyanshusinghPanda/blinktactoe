@@ -1,8 +1,10 @@
 import React from 'react'
 
-const Squarebox = () => {
+const Squarebox = ({value , onClick}) => {
   return (
-    <div>Squarebox</div>
+    <button className="square" onClick={onClick}>
+      {value}
+    </button>
   )
 }
 
