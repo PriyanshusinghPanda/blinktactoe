@@ -18,8 +18,10 @@ function App() {
     setBoard(Array(9).fill(null));
     setIsXNext(true);
     setWinner(null);
+    setFirstPersonMoves([]);
+    setSecondPersonMoves([]);
   };
-  
+
   const handleClick = (index) => {
     if (board[index] || winner) return;
 
@@ -29,19 +31,19 @@ function App() {
     newBoard[index] = currentPlayer;
 
     if (isXNext) {
-      const updatedMoves = [...firstPersonMoves, index];
+      let updatedMoves = [...firstPersonMoves, index];
       if (updatedMoves.length > 3) {
         const oldestMove = updatedMoves[0];
         newBoard[oldestMove] = null;
-        updatedMoves.shift();
+        updatedMoves = updatedMoves.slice(1); // creates new array without first element
       }
       setFirstPersonMoves(updatedMoves);
     } else {
-      const updatedMoves = [...secondPersonMoves, index];
+      let updatedMoves = [...secondPersonMoves, index];
       if (updatedMoves.length > 3) {
         const oldestMove = updatedMoves[0];
         newBoard[oldestMove] = null;
-        updatedMoves.shift();
+        updatedMoves = updatedMoves.slice(1); // creates new array without first element
       }
       setSecondPersonMoves(updatedMoves);
     }
@@ -89,6 +91,8 @@ function App() {
             setBoard(Array(9).fill(null));
             setIsXNext(true);
             setWinner(null);
+            setFirstPersonMoves([]);
+            setSecondPersonMoves([]);
           }}
           className="back-button"
         >
