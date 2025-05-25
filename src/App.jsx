@@ -1,7 +1,7 @@
-import { useState } from 'react'
+import { useState } from "react";
 import Gameboard from "./components/Gameboard";
-import StatusBar from './components/StatusBar';
-import { checkWinner } from './gametype/offline/gameUtils';
+import StatusBar from "./components/StatusBar";
+import { checkWinner } from "./gametype/offline/gameUtils";
 
 import "./App.css";
 
@@ -11,23 +11,48 @@ function App() {
   const [isXNext, setIsXNext] = useState(true);
   const [winner, setWinner] = useState(null);
 
+  const [firstPersonMoves, setFirstPersonMoves] = useState([]);
+  const [secondPersonMoves, setSecondPersonMoves] = useState([]);
+
   const resetGame = () => {
     setBoard(Array(9).fill(null));
     setIsXNext(true);
     setWinner(null);
   };
+  
   const handleClick = (index) => {
     if (board[index] || winner) return;
 
     const newBoard = [...board];
-    newBoard[index] = isXNext ? 'X' : 'O';
+    const currentPlayer = isXNext ? "X" : "O";
+
+    newBoard[index] = currentPlayer;
+
+    if (isXNext) {
+      const updatedMoves = [...firstPersonMoves, index];
+      if (updatedMoves.length > 3) {
+        const oldestMove = updatedMoves[0];
+        newBoard[oldestMove] = null;
+        updatedMoves.shift();
+      }
+      setFirstPersonMoves(updatedMoves);
+    } else {
+      const updatedMoves = [...secondPersonMoves, index];
+      if (updatedMoves.length > 3) {
+        const oldestMove = updatedMoves[0];
+        newBoard[oldestMove] = null;
+        updatedMoves.shift();
+      }
+      setSecondPersonMoves(updatedMoves);
+    }
+
     setBoard(newBoard);
 
     const gameWinner = checkWinner(newBoard);
     if (gameWinner) {
       setWinner(gameWinner);
     } else if (newBoard.every(Boolean)) {
-      setWinner('Draw');
+      setWinner("Draw");
     } else {
       setIsXNext(!isXNext);
     }
@@ -40,8 +65,8 @@ function App() {
   const renderModeSelection = () => (
     <div className="mode-selection">
       <h2>Select Game Mode</h2>
-      <button onClick={() => handleModeSelect('offline')}>Offline Mode</button>
-      <button onClick={() => handleModeSelect('online')} disabled>
+      <button onClick={() => handleModeSelect("offline")}>Offline Mode</button>
+      <button onClick={() => handleModeSelect("online")} disabled>
         Online Mode (Coming Soon)
       </button>
     </div>
@@ -49,30 +74,38 @@ function App() {
 
   if (!mode) return renderModeSelection();
 
-  if (mode === 'offline') {
+  if (mode === "offline") {
     return (
       <div className="app">
         <h1>Tic Tac Toe</h1>
         <StatusBar isXNext={isXNext} winner={winner} />
         <Gameboard board={board} onClick={handleClick} />
-        <button onClick={resetGame} className="reset-button">Restart Game</button>
-        <button onClick={() => {
-          setMode(null)
-          setBoard(Array(9).fill(null));
-          setIsXNext(true);
-          setWinner(null);
-
-        }} className="back-button">Back to Mode Selection</button>
+        <button onClick={resetGame} className="reset-button">
+          Restart Game
+        </button>
+        <button
+          onClick={() => {
+            setMode(null);
+            setBoard(Array(9).fill(null));
+            setIsXNext(true);
+            setWinner(null);
+          }}
+          className="back-button"
+        >
+          Back to Mode Selection
+        </button>
       </div>
     );
   }
 
-  if (mode === 'online') {
+  if (mode === "online") {
     return (
       <div className="app">
         <h1>Online Mode</h1>
         <p>Coming soon!</p>
-        <button onClick={() => setMode(null)} className="back-button">Back</button>
+        <button onClick={() => setMode(null)} className="back-button">
+          Back
+        </button>
       </div>
     );
   }
