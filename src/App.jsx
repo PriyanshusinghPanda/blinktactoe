@@ -25,10 +25,10 @@ function App() {
   };
 
   const getRandomEmoji = (category) => {
-  const emojis = emojiCategories[category];
-  const randomIndex = Math.floor(Math.random() * emojis.length);
-  return emojis[randomIndex];
-};
+    const emojis = emojiCategories[category];
+    const randomIndex = Math.floor(Math.random() * emojis.length);
+    return emojis[randomIndex];
+  };
 
   const resetGame = () => {
     setBoard(Array(9).fill(null));
@@ -96,38 +96,37 @@ function App() {
     if (!player1Category || !player2Category) {
       return (
         <div className="category-selection">
-  <h2>Player 1: Choose your category</h2>
-  {Object.keys(emojiCategories).map((category) => (
-    <button
-      key={category}
-      onClick={() => {
-        setPlayer1Category(category);
-        setPlayer1Emoji(getRandomEmoji(category));
-      }}
-    >
-      {category}
-    </button>
-  ))}
+          <h2>Player 1: Choose your category</h2>
+          {Object.keys(emojiCategories).map((category) => (
+            <button
+              key={category}
+              onClick={() => {
+                setPlayer1Category(category);
+                setPlayer1Emoji(getRandomEmoji(category));
+              }}
+            >
+              {category}
+            </button>
+          ))}
 
-  {player1Category && (
-    <>
-      <h2>Player 2: Choose your category</h2>
-      {Object.keys(emojiCategories).map((category) => (
-        <button
-          key={category}
-          disabled={category === player1Category}
-          onClick={() => {
-            setPlayer2Category(category);
-            setPlayer2Emoji(getRandomEmoji(category));
-          }}
-        >
-          {category}
-        </button>
-      ))}
-    </>
-  )}
-</div>
-
+          {player1Category && (
+            <>
+              <h2>Player 2: Choose your category</h2>
+              {Object.keys(emojiCategories).map((category) => (
+                <button
+                  key={category}
+                  disabled={category === player1Category}
+                  onClick={() => {
+                    setPlayer2Category(category);
+                    setPlayer2Emoji(getRandomEmoji(category));
+                  }}
+                >
+                  {category}
+                </button>
+              ))}
+            </>
+          )}
+        </div>
       );
     } else {
       return (
@@ -146,6 +145,10 @@ function App() {
               setWinner(null);
               setFirstPersonMoves([]);
               setSecondPersonMoves([]);
+              setPlayer1Category(null);
+              setPlayer2Category(null);
+              setPlayer1Emoji(null);
+              setPlayer2Emoji(null);
             }}
             className="back-button"
           >
